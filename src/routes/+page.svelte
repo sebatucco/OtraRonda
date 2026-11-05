@@ -26,7 +26,10 @@
 		>
 			Ver menú de demo
 		</a>
-		<a href={resolve('/panel')} class="rounded-full border border-line px-6 py-3 font-semibold">
+		<a
+			href={resolve('/panel/(app)')}
+			class="rounded-full border border-line px-6 py-3 font-semibold"
+		>
 			Soy un bar
 		</a>
 	</div>

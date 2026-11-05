@@ -37,6 +37,25 @@ export type Bar = {
 	accent_color: string;
 	currency: string;
 	ordering_enabled: boolean;
+	order_mode: 'open' | 'approve_first';
+};
+
+export type OrderStatus =
+	'pending' | 'accepted' | 'preparing' | 'served' | 'rejected' | 'cancelled';
+
+/** Lo que devuelve table_status() para el cliente. */
+export type TableOrder = {
+	id: string;
+	customer_name: string | null;
+	status: 'pending' | 'accepted' | 'preparing' | 'served';
+	total: number;
+	created_at: string;
+	items: { name: string; quantity: number; unit_price: number; options: { name: string }[] }[];
+};
+
+export type TableStatus = {
+	session_status: 'open' | 'bill_requested' | null;
+	orders: TableOrder[];
 };
 
 export type TableInfo = { id: string; label: string; token: string };

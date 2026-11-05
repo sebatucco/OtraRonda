@@ -16,5 +16,13 @@ export const variables = defineEnvVars({
 		schema: required('PUBLIC_SUPABASE_PUBLISHABLE_KEY'),
 		description:
 			'Clave pública (publishable / anon) de Supabase. Es segura en el navegador: RLS protege los datos.'
+	},
+	ANTHROPIC_API_KEY: {
+		schema: (value) => value || undefined,
+		description: 'Opcional. Clave de la API de Claude para importar la carta desde una foto.'
+	},
+	ANTHROPIC_MODEL: {
+		schema: (value) => value || 'claude-sonnet-5-5',
+		description: 'Modelo de Claude para leer cartas (por defecto claude-sonnet-5-5).'
 	}
 });

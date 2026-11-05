@@ -16,18 +16,23 @@ y el bar ve **qué mesa pidió qué** en tiempo real.
 
 ```
 src/
-  env.ts                    variables de entorno (API nueva de SvelteKit 3)
-  hooks.server.ts           cliente de Supabase por request (cookies)
+  env.ts                      variables de entorno (API nueva de SvelteKit 3)
+  hooks.server.ts             cliente de Supabase por request (cookies)
   lib/
-    supabase.ts             cliente para el navegador
-    types.ts, format.ts     tipos y formato de precios ($ 4.500)
+    cart.svelte.ts            carrito por mesa (se guarda en el celular)
+    panel/live.svelte.ts      salón en vivo: Realtime + refresco cada 20 s
+    panel/sound.ts            aviso sonoro con Web Audio (sin archivos)
+    panel/menu.ts             leer/guardar menú, subir fotos WebP
+    components/               Sheet, Stepper, Toggle, Toaster, menu/*, panel/*
   routes/
-    +page.svelte            landing
-    m/[bar]/[mesa]/         menú del cliente  →  URL del QR
-    panel/                  panel del bar (en construcción)
+    +page.svelte              landing
+    m/[bar]/[mesa]/           carta del cliente → URL del QR
+    auth/callback, auth/salir login con link mágico
+    panel/login, panel/nuevo  entrar y crear el bar
+    panel/(app)/              salón · menú · importar con IA · mesas y QR · ajustes
 supabase/
-  migrations/               esquema SQL con RLS y funciones (RPC)
-  seed.sql                  bar de demo "La Esquina" con 6 mesas
+  migrations/                 esquema, RLS, funciones, bucket de fotos
+  seed.sql                    bar de demo "La Esquina" con 6 mesas
 ```
 
 ## Cómo funciona la seguridad
@@ -59,10 +64,15 @@ supabase/
 2. Creá un proyecto en [Supabase](https://supabase.com) (región **South America — São Paulo**).
 3. En Supabase → **SQL Editor**, ejecutá en orden:
    - `supabase/migrations/20261105000000_init.sql`
+   - `supabase/migrations/20261105010000_storage_y_realtime.sql`
    - `supabase/seed.sql` (opcional, datos de demo)
-4. Copiá `.env.example` a `.env` y completá la URL y la clave pública (Project Settings → API).
-5. `npm run dev` y abrí <http://localhost:5173/m/la-esquina/demo-mesa-1>
+4. En Supabase → **Authentication → URL Configuration**, agregá `http://localhost:5173/auth/callback`
+   (y después la URL de producción) a las Redirect URLs.
+5. Copiá `.env.example` a `.env` y completá la URL y la clave pública (Project Settings → API).
+6. `npm run dev` y abrí <http://localhost:5173/m/la-esquina/demo-mesa-1>
 
+> La importación con IA necesita `ANTHROPIC_API_KEY` (opcional; sin ella el resto funciona).
+>
 > `npm run build` valida las variables de entorno: sin `.env` (o sin las variables
 > configuradas en Cloudflare) el build falla a propósito, con un mensaje claro.
 
@@ -79,11 +89,11 @@ npm run preview   # probar el build con wrangler
 ## Hoja de ruta (v1)
 
 - [x] Base del proyecto, esquema y seguridad
-- [x] Menú del cliente (lectura)
-- [ ] Hoja de producto con opciones, carrito y envío del pedido
-- [ ] Estado del pedido + llamar al mozo / pedir la cuenta
-- [ ] Panel: login, salón por colores, pedidos en vivo con sonido
-- [ ] Menú: agotado con un toque, editor, fotos (WebP al subir)
-- [ ] PDF con los QR de todas las mesas
-- [ ] Importar la carta con IA desde una foto
+- [x] Carta del cliente: opciones, carrito, envío, estado de la mesa, mozo/cuenta, "otra ronda igual"
+- [x] Panel: login sin contraseña, alta del bar, salón por colores, pedidos en vivo con sonido
+- [x] Menú: agotado con un toque, editor con opciones, fotos WebP
+- [x] QR por mesa imprimibles (carteles o stickers, guardar como PDF)
+- [x] Importar la carta con IA desde foto o PDF
+- [ ] Conectar Supabase real y probar de punta a punta
 - [ ] Deploy en Cloudflare
+- [ ] v2: pagos con Mercado Pago, impresora de comandas, reportes

@@ -18,7 +18,7 @@ export const load: PageServerLoad = async ({ params, locals: { supabase }, setHe
 	const [{ data: bar }, { data: categories }] = await Promise.all([
 		supabase
 			.from('bars')
-			.select('id, slug, name, logo_url, accent_color, currency, ordering_enabled')
+			.select('id, slug, name, logo_url, accent_color, currency, ordering_enabled, order_mode')
 			.eq('id', table.bar_id)
 			.single<Bar>(),
 		supabase
