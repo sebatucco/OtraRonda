@@ -6,6 +6,7 @@
 
 	let {
 		open = $bindable(false),
+		loading = false,
 		orders,
 		currency,
 		approveFirst,
@@ -14,6 +15,7 @@
 		onrepeat
 	}: {
 		open: boolean;
+		loading?: boolean;
 		orders: TableOrder[];
 		currency: string;
 		approveFirst: boolean;
@@ -46,7 +48,17 @@
 		</p>
 	{/if}
 
-	{#if orders.length === 0}
+	{#if loading}
+		<div class="flex flex-col gap-3" aria-label="Cargando">
+			{#each [0, 1] as n (n)}
+				<div class="animate-pulse rounded-2xl p-4 ring-1 ring-line">
+					<div class="h-4 w-1/2 rounded-full bg-line"></div>
+					<div class="mt-3 h-3 w-3/4 rounded-full bg-line"></div>
+					<div class="mt-2 h-3 w-2/3 rounded-full bg-line"></div>
+				</div>
+			{/each}
+		</div>
+	{:else if orders.length === 0}
 		<p class="py-10 text-center text-ink-soft">Todavía no hay pedidos en esta mesa.</p>
 	{:else}
 		<ol class="flex flex-col gap-3">

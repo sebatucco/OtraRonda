@@ -15,3 +15,13 @@ export function minutesSince(iso: string, now = Date.now()) {
 
 export const clock = (iso: string) =>
 	new Date(iso).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+
+/** Umbrales del semáforo de pedidos (minutos esperando). */
+export const WARN_MIN = 10;
+export const LATE_MIN = 20;
+
+export type Urgency = 'ok' | 'warn' | 'late';
+export function urgency(iso: string, now = Date.now()): Urgency {
+	const m = minutesSince(iso, now);
+	return m >= LATE_MIN ? 'late' : m >= WARN_MIN ? 'warn' : 'ok';
+}

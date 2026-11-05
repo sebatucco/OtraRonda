@@ -1,8 +1,18 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { resolve } from '$app/paths';
-	import { ArrowDown, ArrowUp, Pencil, Plus, Sparkles, Trash2, ExternalLink } from '@lucide/svelte';
+	import {
+		ArrowDown,
+		ArrowUp,
+		Pencil,
+		Plus,
+		Sparkles,
+		Star,
+		Trash2,
+		ExternalLink
+	} from '@lucide/svelte';
 	import Toggle from '#lib/components/Toggle.svelte';
+	import Thumb from '#lib/components/menu/Thumb.svelte';
 	import ProductEditor from '#lib/components/panel/ProductEditor.svelte';
 	import { usePanel } from '#lib/panel/context.js';
 	import { loadMenu, swapPositions, type EditCategory, type EditProduct } from '#lib/panel/menu.js';
@@ -98,6 +108,14 @@
 		else toast(available ? `${p.name}: disponible` : `${p.name}: agotado`);
 	}
 
+	/** Destacados: aparecen en el carrusel "Recomendados de la casa" arriba de la carta. */
+	async function setFeatured(p: EditProduct, featured: boolean) {
+		p.featured = featured;
+		const { error } = await sb.from('products').update({ featured }).eq('id', p.id!);
+		if (error) fail(error);
+		else toast(featured ? `${p.name}: ahora es recomendado ⭐` : `${p.name}: ya no es recomendado`);
+	}
+
 	function newProduct(c: EditCategory) {
 		editing = {
 			category_id: c.id,
@@ -107,6 +125,7 @@
 			image_url: null,
 			tags: [],
 			available: true,
+			featured: false,
 			active: true,
 			position: (c.products.at(-1)?.position ?? 0) + 1,
 			option_groups: []
@@ -217,15 +236,11 @@
 									class="flex min-w-0 flex-1 items-center gap-3 text-left"
 									onclick={() => edit(p)}
 								>
-									{#if p.image_url}
-										<img
-											src={p.image_url}
-											alt=""
-											class="size-12 shrink-0 rounded-xl object-cover"
-										/>
-									{:else}
-										<span class="size-12 shrink-0 rounded-xl bg-paper"></span>
-									{/if}
+									<Thumb
+										src={p.image_url}
+										name={p.name}
+										class="size-12 shrink-0 rounded-xl text-[0.7rem]"
+									/>
 									<span class="min-w-0">
 										<span class="block truncate font-semibold">{p.name}</span>
 										<span class="block text-sm text-ink-soft">
@@ -251,6 +266,19 @@
 										onclick={() => moveProduct(c, pi, 1)}><ArrowDown size={14} /></button
 									>
 								</div>
+								<button
+									type="button"
+									class={[
+										'grid size-10 place-items-center rounded-full',
+										p.featured ? 'text-amber-500' : 'text-ink-soft/40'
+									]}
+									aria-label={p.featured ? 'Quitar de recomendados' : 'Destacar en recomendados'}
+									aria-pressed={p.featured}
+									title="Recomendado de la casa"
+									onclick={() => setFeatured(p, !p.featured)}
+								>
+									<Star size={20} class={p.featured ? 'fill-amber-400' : ''} />
+								</button>
 								<span class="flex flex-col items-center gap-0.5">
 									<Toggle
 										label="Disponible"

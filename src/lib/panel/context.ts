@@ -7,6 +7,7 @@ export type PanelBar = {
 	slug: string;
 	name: string;
 	logo_url: string | null;
+	cover_url: string | null;
 	accent_color: string;
 	currency: string;
 	order_mode: 'open' | 'approve_first';

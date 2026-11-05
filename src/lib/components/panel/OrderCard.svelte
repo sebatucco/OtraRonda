@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Check, X, HandPlatter, ChefHat } from '@lucide/svelte';
 	import { price } from '#lib/format.js';
-	import { ago, clock, minutesSince } from '#lib/time.js';
+	import { ago, clock, urgency } from '#lib/time.js';
 	import type { LiveOrder } from '#lib/panel/live.svelte.js';
 	import type { OrderStatus } from '#lib/types.js';
 
@@ -23,9 +23,9 @@
 		onstatus: (id: string, s: OrderStatus) => void;
 	} = $props();
 
-	const waited = $derived(minutesSince(order.created_at, now));
 	const isNew = $derived(order.status === 'pending');
-	const late = $derived(order.status !== 'served' && waited >= 15);
+	const level = $derived(order.status === 'served' ? 'ok' : urgency(order.created_at, now));
+	const BAR = { ok: 'border-l-emerald-500', warn: 'border-l-amber-400', late: 'border-l-red-500' };
 
 	const LABEL: Record<OrderStatus, string> = {
 		pending: 'Nuevo',
@@ -39,7 +39,8 @@
 
 <article
 	class={[
-		'rounded-card bg-card p-4 ring-1',
+		'rounded-card border-l-[6px] bg-card p-4 ring-1',
+		order.status === 'served' ? 'border-l-line' : BAR[level],
 		isNew
 			? 'shadow-[0_0_0_6px_color-mix(in_oklab,var(--color-accent)_15%,transparent)] ring-2 ring-accent'
 			: 'ring-line',
@@ -53,7 +54,12 @@
 			{/if}
 			<p class="mt-1 text-sm text-ink-soft">
 				{order.customer_name ?? 'Sin nombre'} · {clock(order.created_at)} ·
-				<span class={late ? 'font-bold text-red-600' : ''}>{ago(order.created_at, now)}</span>
+				<span
+					class={[
+						level === 'late' && 'font-bold text-red-600',
+						level === 'warn' && 'font-bold text-amber-600'
+					]}>{ago(order.created_at, now)}</span
+				>
 			</p>
 		</div>
 		<span
@@ -70,9 +76,14 @@
 				<span class="font-bold tabular-nums">{i.quantity}×</span>
 				<span class="font-semibold">{i.name}</span>
 				{#if i.options?.length}
-					<span class="text-ink-soft">({i.options.map((o) => o.name).join(', ')})</span>
+					<span class="font-semibold text-accent">· {i.options.map((o) => o.name).join(', ')}</span>
 				{/if}
-				{#if i.note}<span class="block pl-6 text-sm text-amber-700 italic">“{i.note}”</span>{/if}
+				{#if i.note}
+					<span
+						class="mt-1 ml-6 inline-block rounded-lg bg-amber-100 px-2 py-0.5 text-sm font-bold text-amber-900"
+						>⚠ {i.note}</span
+					>
+				{/if}
 			</li>
 		{/each}
 	</ul>

@@ -20,6 +20,34 @@
 	--radius-card: 1.25rem;
 }
 
+@keyframes bump {
+	0% {
+		transform: scale(1);
+	}
+	35% {
+		transform: scale(1.06);
+	}
+	65% {
+		transform: scale(0.97);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+@utility animate-bump {
+	animation: bump 380ms cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	::before,
+	::after {
+		animation-duration: 1ms !important;
+		transition-duration: 1ms !important;
+	}
+}
+
 @layer base {
 	html {
 		-webkit-tap-highlight-color: transparent;

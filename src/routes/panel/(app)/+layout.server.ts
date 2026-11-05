@@ -9,7 +9,7 @@ export const load: LayoutServerLoad = async ({ locals, url, cookies }) => {
 	const { data: memberships } = await locals.supabase
 		.from('bar_members')
 		.select(
-			'role, bars ( id, slug, name, logo_url, accent_color, currency, order_mode, ordering_enabled )'
+			'role, bars ( id, slug, name, logo_url, cover_url, accent_color, currency, order_mode, ordering_enabled )'
 		)
 		.eq('user_id', user.id);
 

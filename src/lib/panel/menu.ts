@@ -25,6 +25,7 @@ export type EditProduct = {
 	image_url: string | null;
 	tags: string[];
 	available: boolean;
+	featured: boolean;
 	active: boolean;
 	position: number;
 	option_groups: EditGroup[];
@@ -46,7 +47,7 @@ export async function loadMenu(sb: SupabaseClient, barId: string): Promise<EditC
 		.from('categories')
 		.select(
 			`id, name, position, active,
-			 products ( id, category_id, name, description, price, image_url, tags, available, active, position,
+			 products ( id, category_id, name, description, price, image_url, tags, available, featured, active, position,
 			   option_groups ( id, name, min_select, max_select, position,
 			     options ( id, name, price_delta, available, position ) ) )`
 		)
@@ -82,6 +83,7 @@ export async function saveProduct(sb: SupabaseClient, barId: string, p: EditProd
 		image_url: p.image_url,
 		tags: p.tags,
 		available: p.available,
+		featured: p.featured,
 		active: p.active,
 		position: p.position
 	};

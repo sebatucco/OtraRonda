@@ -65,6 +65,7 @@ supabase/
 3. En Supabase → **SQL Editor**, ejecutá en orden:
    - `supabase/migrations/20261105000000_init.sql`
    - `supabase/migrations/20261105010000_storage_y_realtime.sql`
+   - `supabase/migrations/20261105020000_destacados_y_portada.sql`
    - `supabase/seed.sql` (opcional, datos de demo)
 4. En Supabase → **Authentication → URL Configuration**, agregá `http://localhost:5173/auth/callback`
    (y después la URL de producción) a las Redirect URLs.
@@ -94,6 +95,8 @@ npm run preview   # probar el build con wrangler
 - [x] Menú: agotado con un toque, editor con opciones, fotos WebP
 - [x] QR por mesa imprimibles (carteles o stickers, guardar como PDF)
 - [x] Importar la carta con IA desde foto o PDF
+- [x] Diseño: portada, recomendados, agregar con un toque, buscador, etiquetas de color, "¿algo para acompañar?"
+- [x] Modo cocina: pantalla oscura, semáforo por tiempo de espera (10/20 min), aclaraciones resaltadas
 - [ ] Conectar Supabase real y probar de punta a punta
 - [ ] Deploy en Cloudflare
 - [ ] v2: pagos con Mercado Pago, impresora de comandas, reportes

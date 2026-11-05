@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { BellRing, ReceiptText, CircleDollarSign } from '@lucide/svelte';
+	import { resolve } from '$app/paths';
+	import { BellRing, ReceiptText, CircleDollarSign, ChefHat } from '@lucide/svelte';
 	import Sheet from '#lib/components/Sheet.svelte';
 	import OrderCard from '#lib/components/panel/OrderCard.svelte';
 	import { usePanel } from '#lib/panel/context.js';
@@ -73,6 +74,11 @@
 				{counts.busy} ocupadas · {counts.free} libres
 			</p>
 		</div>
+		<a
+			href={resolve('/panel/(app)/cocina')}
+			class="order-last inline-flex h-11 items-center gap-2 rounded-full bg-ink px-4 font-bold text-paper sm:order-none sm:ml-auto lg:ml-auto"
+			><ChefHat size={18} /> Modo cocina</a
+		>
 		<div class="flex rounded-full bg-card p-1 ring-1 ring-line lg:hidden">
 			{#each [['pedidos', `Pedidos${live.queue.length ? ` (${live.queue.length})` : ''}`], ['mesas', 'Mesas']] as [value, label] (value)}
 				<button

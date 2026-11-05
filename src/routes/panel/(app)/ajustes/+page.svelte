@@ -27,6 +27,18 @@
 		'#1C1917'
 	];
 
+	async function onCover(e: Event) {
+		const file = (e.currentTarget as HTMLInputElement).files?.[0];
+		if (!file) return;
+		uploading = true;
+		try {
+			form.cover_url = await uploadImage(sb, form.id, file, { max: 1600 });
+		} catch (err) {
+			toast(friendlyError(err), 'error');
+		}
+		uploading = false;
+	}
+
 	async function onLogo(e: Event) {
 		const file = (e.currentTarget as HTMLInputElement).files?.[0];
 		if (!file) return;
@@ -47,6 +59,7 @@
 			.update({
 				name: form.name.trim(),
 				logo_url: form.logo_url,
+				cover_url: form.cover_url,
 				accent_color: form.accent_color.toUpperCase(),
 				order_mode: form.order_mode,
 				ordering_enabled: form.ordering_enabled
@@ -72,6 +85,39 @@
 		<fieldset disabled={!isOwner} class="flex flex-col gap-6">
 			<section class="rounded-card bg-card p-5 ring-1 ring-line">
 				<h2 class="text-lg font-extrabold">Tu marca</h2>
+				<div class="mt-4">
+					<span class="text-sm font-bold">Foto de portada</span>
+					<span class="block text-sm text-ink-soft"
+						>La barra, el salón o tu plato estrella. Es lo primero que ven al escanear.</span
+					>
+					<label
+						class="relative mt-2 flex aspect-[16/7] cursor-pointer items-end overflow-hidden rounded-2xl bg-accent ring-1 ring-line"
+					>
+						{#if form.cover_url}
+							<img src={form.cover_url} alt="" class="absolute inset-0 size-full object-cover" />
+							<span class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></span>
+						{/if}
+						<span class="relative flex w-full items-end justify-between p-4 text-white">
+							<span class="font-display text-2xl font-extrabold">{form.name || 'Tu bar'}</span>
+							<span
+								class="flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-bold text-ink"
+								><ImagePlus size={16} />{uploading
+									? 'Subiendo…'
+									: form.cover_url
+										? 'Cambiar'
+										: 'Subir foto'}</span
+							>
+						</span>
+						<input type="file" accept="image/*" class="sr-only" onchange={onCover} />
+					</label>
+					{#if form.cover_url}
+						<button
+							type="button"
+							class="mt-1 text-sm font-semibold text-ink-soft"
+							onclick={() => (form.cover_url = null)}>Quitar portada</button
+						>
+					{/if}
+				</div>
 				<div class="mt-4 flex items-center gap-4">
 					<label
 						class="grid size-20 shrink-0 cursor-pointer place-items-center overflow-hidden rounded-full bg-paper ring-1 ring-line"

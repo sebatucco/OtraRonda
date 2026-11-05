@@ -24,6 +24,7 @@ export type Product = {
 	image_url: string | null;
 	tags: string[];
 	available: boolean;
+	featured: boolean;
 	option_groups: OptionGroup[];
 };
 
@@ -34,6 +35,7 @@ export type Bar = {
 	slug: string;
 	name: string;
 	logo_url: string | null;
+	cover_url: string | null;
 	accent_color: string;
 	currency: string;
 	ordering_enabled: boolean;

@@ -2,7 +2,10 @@
 	import Sheet from '#lib/components/Sheet.svelte';
 	import Stepper from '#lib/components/Stepper.svelte';
 	import { price } from '#lib/format.js';
+	import { Plus } from '@lucide/svelte';
 	import type { Cart } from '#lib/cart.svelte.js';
+	import type { Product } from '#lib/types.js';
+	import Thumb from './Thumb.svelte';
 
 	let {
 		open = $bindable(false),
@@ -10,6 +13,8 @@
 		currency,
 		tableLabel,
 		sending,
+		suggestions = [],
+		onquickadd,
 		name = $bindable(''),
 		note = $bindable(''),
 		onsend
@@ -19,6 +24,8 @@
 		currency: string;
 		tableLabel: string;
 		sending: boolean;
+		suggestions?: Product[];
+		onquickadd: (p: Product) => void;
 		name: string;
 		note: string;
 		onsend: () => void;
@@ -53,6 +60,37 @@
 				</li>
 			{/each}
 		</ul>
+
+		{#if suggestions.length}
+			<div class="mt-2 rounded-2xl bg-paper p-3">
+				<p class="px-1 text-sm font-bold">¿Algo para acompañar?</p>
+				<ul class="mt-2 flex [scrollbar-width:none] gap-2 overflow-x-auto">
+					{#each suggestions as p (p.id)}
+						<li class="w-36 shrink-0">
+							<button
+								type="button"
+								onclick={() => onquickadd(p)}
+								class="flex h-full w-full flex-col justify-between overflow-hidden rounded-xl bg-card text-left ring-1 ring-line active:scale-[0.98]"
+							>
+								{#if p.image_url}
+									<Thumb src={p.image_url} name={p.name} class="aspect-[16/10] w-full text-xl" />
+								{/if}
+								<span class="flex items-end justify-between gap-1 p-2">
+									<span class="min-w-0">
+										<span class="line-clamp-2 text-sm leading-snug font-semibold">{p.name}</span>
+										<span class="text-sm font-bold tabular-nums">{price(p.price, currency)}</span>
+									</span>
+									<span
+										class="grid size-7 shrink-0 place-items-center rounded-full bg-accent text-white"
+										><Plus size={16} strokeWidth={3} /></span
+									>
+								</span>
+							</button>
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
 
 		<div class="mt-4 grid gap-3">
 			<label class="block">

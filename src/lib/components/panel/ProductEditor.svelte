@@ -179,6 +179,14 @@
 			</div>
 			<div class="flex items-center justify-between gap-3 rounded-2xl bg-paper px-4 py-3">
 				<span
+					><span class="font-bold">⭐ Recomendado de la casa</span><br /><span
+						class="text-sm text-ink-soft">Aparece arriba de todo, con foto grande</span
+					></span
+				>
+				<Toggle label="Recomendado" checked={p.featured} onchange={(v) => p && (p.featured = v)} />
+			</div>
+			<div class="flex items-center justify-between gap-3 rounded-2xl bg-paper px-4 py-3">
+				<span
 					><span class="font-bold">Visible en la carta</span><br /><span
 						class="text-sm text-ink-soft">Ocultalo sin borrarlo</span
 					></span

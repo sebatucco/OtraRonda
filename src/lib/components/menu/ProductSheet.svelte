@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Sheet from '#lib/components/Sheet.svelte';
 	import Stepper from '#lib/components/Stepper.svelte';
-	import { price, TAG_LABELS } from '#lib/format.js';
+	import { price } from '#lib/format.js';
+	import Tag from './Tag.svelte';
 	import type { Product } from '#lib/types.js';
 	import type { CartItem } from '#lib/cart.svelte.js';
 
@@ -80,7 +81,7 @@
 			<img
 				src={product.image_url}
 				alt={product.name}
-				class="mb-4 aspect-[4/3] w-full rounded-2xl object-cover"
+				class="-mx-1 mb-4 aspect-[4/3] w-[calc(100%+0.5rem)] rounded-2xl bg-accent/10 object-cover"
 			/>
 		{/if}
 		{#if product.description}
@@ -88,11 +89,7 @@
 		{/if}
 		<div class="mt-3 flex flex-wrap items-center gap-2">
 			<span class="text-lg font-bold">{price(product.price, currency)}</span>
-			{#each product.tags as tag (tag)}
-				<span class="rounded-full bg-paper px-2.5 py-0.5 text-xs font-semibold text-ink-soft">
-					{TAG_LABELS[tag] ?? tag}
-				</span>
-			{/each}
+			{#each product.tags as tag (tag)}<Tag {tag} />{/each}
 		</div>
 
 		{#if canOrder}
