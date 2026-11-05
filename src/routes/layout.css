@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+
+/*
+ * Sistema de diseño de Otra Ronda.
+ * --accent lo pisa cada bar con su color (style="--accent: #...").
+ */
+@theme {
+	--font-display: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+	--font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+	--color-ink: #1c1917;
+	--color-ink-soft: #57534e;
+	--color-paper: #faf7f2;
+	--color-card: #ffffff;
+	--color-line: #e9e3d9;
+	--color-accent: var(--accent, #e8572a);
+	--color-ok: #2f855a;
+
+	--radius-card: 1.25rem;
+}
+
+@layer base {
+	html {
+		-webkit-tap-highlight-color: transparent;
+		text-size-adjust: 100%;
+	}
+	body {
+		@apply bg-paper font-sans text-ink antialiased;
+		font-size: 17px; /* menús QR: la queja #1 es la letra chica */
+	}
+	h1,
+	h2,
+	h3 {
+		@apply font-display tracking-tight;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-ink: #f5f1ea;
+		--color-ink-soft: #b8b0a4;
+		--color-paper: #141110;
+		--color-card: #1f1b19;
+		--color-line: #342e2a;
+	}
+}
